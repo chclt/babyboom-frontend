@@ -10,18 +10,14 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WelcomeRouteImport } from './routes/welcome'
-import { Route as MemoriesRouteImport } from './routes/memories'
 import { Route as BoomRouteImport } from './routes/boom'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MemoriesIndexRouteImport } from './routes/memories.index'
+import { Route as MemoriesCreateRouteImport } from './routes/memories.create'
 
 const WelcomeRoute = WelcomeRouteImport.update({
   id: '/welcome',
   path: '/welcome',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MemoriesRoute = MemoriesRouteImport.update({
-  id: '/memories',
-  path: '/memories',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BoomRoute = BoomRouteImport.update({
@@ -34,39 +30,59 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MemoriesIndexRoute = MemoriesIndexRouteImport.update({
+  id: '/memories/',
+  path: '/memories/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MemoriesCreateRoute = MemoriesCreateRouteImport.update({
+  id: '/memories/create',
+  path: '/memories/create',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/boom': typeof BoomRoute
-  '/memories': typeof MemoriesRoute
   '/welcome': typeof WelcomeRoute
+  '/memories/create': typeof MemoriesCreateRoute
+  '/memories': typeof MemoriesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/boom': typeof BoomRoute
-  '/memories': typeof MemoriesRoute
   '/welcome': typeof WelcomeRoute
+  '/memories/create': typeof MemoriesCreateRoute
+  '/memories': typeof MemoriesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/boom': typeof BoomRoute
-  '/memories': typeof MemoriesRoute
   '/welcome': typeof WelcomeRoute
+  '/memories/create': typeof MemoriesCreateRoute
+  '/memories/': typeof MemoriesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/boom' | '/memories' | '/welcome'
+  fullPaths: '/' | '/boom' | '/welcome' | '/memories/create' | '/memories'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/boom' | '/memories' | '/welcome'
-  id: '__root__' | '/' | '/boom' | '/memories' | '/welcome'
+  to: '/' | '/boom' | '/welcome' | '/memories/create' | '/memories'
+  id:
+    | '__root__'
+    | '/'
+    | '/boom'
+    | '/welcome'
+    | '/memories/create'
+    | '/memories/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BoomRoute: typeof BoomRoute
-  MemoriesRoute: typeof MemoriesRoute
   WelcomeRoute: typeof WelcomeRoute
+  MemoriesCreateRoute: typeof MemoriesCreateRoute
+  MemoriesIndexRoute: typeof MemoriesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -76,13 +92,6 @@ declare module '@tanstack/react-router' {
       path: '/welcome'
       fullPath: '/welcome'
       preLoaderRoute: typeof WelcomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/memories': {
-      id: '/memories'
-      path: '/memories'
-      fullPath: '/memories'
-      preLoaderRoute: typeof MemoriesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/boom': {
@@ -99,14 +108,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/memories/': {
+      id: '/memories/'
+      path: '/memories'
+      fullPath: '/memories'
+      preLoaderRoute: typeof MemoriesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/memories/create': {
+      id: '/memories/create'
+      path: '/memories/create'
+      fullPath: '/memories/create'
+      preLoaderRoute: typeof MemoriesCreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BoomRoute: BoomRoute,
-  MemoriesRoute: MemoriesRoute,
   WelcomeRoute: WelcomeRoute,
+  MemoriesCreateRoute: MemoriesCreateRoute,
+  MemoriesIndexRoute: MemoriesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
