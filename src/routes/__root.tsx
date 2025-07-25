@@ -2,20 +2,16 @@ import {createRootRoute, Link, Outlet} from '@tanstack/react-router'
 
 export const Route = createRootRoute({
   component: () => (
-    <>
-      <nav>
-        <menu>
-          <li>
-            <Link to="/welcome">
-              welcome
-            </Link>
-          </li>
+    <div className='max-w-md'>
+      <Outlet/>
+
+      <nav className='fixed inset-x-0 bottom-0'>
+        <menu className='grid grid-cols-2'>
           <li>
             <Link to="/memories">
               memories
             </Link>
           </li>
-
           <li>
             <Link to="/boom">
               Boom
@@ -23,8 +19,6 @@ export const Route = createRootRoute({
           </li>
         </menu>
       </nav>
-
-      <Outlet/>
-    </>
+    </div>
   ),
 })
