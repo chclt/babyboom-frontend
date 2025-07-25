@@ -1,13 +1,9 @@
-import {createFileRoute} from '@tanstack/react-router'
+import {createFileRoute, redirect} from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
-  component: PageComponent,
+  beforeLoad: () => {
+    redirect({
+      to: '/memories'
+    })
+  }
 })
-
-function PageComponent() {
-  return (
-    <div>
-      <h1>memories</h1>
-    </div>
-  )
-}
