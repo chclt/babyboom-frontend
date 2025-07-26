@@ -73,7 +73,7 @@ function PageComponent() {
 					>
 						<button
 							className="size-12 flex items-center justify-center"
-							onClick={() => toggleView("timeline")}
+							onClick={() => toggleView()}
 						>
 							<IconTimeFiles />
 						</button>
