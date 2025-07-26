@@ -17,6 +17,8 @@ import {
 } from "../fetchers/index.ts";
 import queryClient from "../libs/queryClient.ts";
 import { cn } from "../libs/utils.ts";
+import IconArrowRotateRightLeft from "../assets/IconArrowRotateRightLeft.tsx";
+import IconLoadingCircle from "../assets/IconLoadingCircle.tsx";
 
 export default function NewMemoryRecordButton() {
 	const [open, setOpen] = useState<boolean>(false);
@@ -37,25 +39,32 @@ export default function NewMemoryRecordButton() {
 	const [title, setTitle] = useState<string>("");
 	const titleRef = useRef<HTMLInputElement>(null);
 
+	const [text, setText] = useState<string>("");
+	const textRef = useRef<HTMLTextAreaElement>(null);
+
 	const { mutateAsync: updateFile } = useMutation({
 		...getUploadFileMutationOptions(),
 	});
 
-	const { mutateAsync: createMemoryRecord } = useMutation({
-		...getCreateMemoryRecordMutationOptions(),
-	});
+	const { mutateAsync: createMemoryRecord, isPending: isCreating } =
+		useMutation({
+			...getCreateMemoryRecordMutationOptions(),
+		});
 
 	const handleCreateMemoryRecord = ({
 		image,
 		title,
+		text,
 	}: {
 		image: File;
 		title: string;
+		text: string;
 	}) => {
 		return updateFile({ fileType: "image", file: image }).then((res) => {
-			return createMemoryRecord({ title, imageList: [res] }).then(() => {
+			return createMemoryRecord({ title, imageList: [res], text }).then(() => {
 				setImage(null);
 				setTitle("");
+				setText("");
 				queryClient.invalidateQueries({
 					queryKey: getMemoryRecordListQueryOptions().queryKey,
 				});
@@ -63,11 +72,19 @@ export default function NewMemoryRecordButton() {
 		});
 	};
 
+	const [flipped, setFlipped] = useState<boolean>(false);
+
+	useEffect(() => {
+		if (flipped) {
+			textRef.current?.focus();
+		}
+	}, [flipped]);
+
 	return (
 		<>
 			<div
 				className={cn(
-					"z-[100] fixed bottom-20 right-8 w-full flex justify-end transition-all duration-150",
+					"z-[100] fixed bottom-20 right-8 w-full flex justify-end ",
 					open && "translate-y-8",
 				)}
 			>
@@ -99,7 +116,7 @@ export default function NewMemoryRecordButton() {
 					onClick={() => {
 						if (open) {
 							if (image) {
-								handleCreateMemoryRecord({ image, title }).finally(() => {
+								handleCreateMemoryRecord({ image, title, text }).finally(() => {
 									setOpen(false);
 								});
 							} else {
@@ -112,6 +129,8 @@ export default function NewMemoryRecordButton() {
 				>
 					{open ? (
 						<IconCheckmark1 className={"size-9"} />
+					) : isCreating ? (
+						<IconLoadingCircle className={"size-9"} />
 					) : (
 						<IconPLusLarge className={"size-9"} />
 					)}
@@ -122,7 +141,7 @@ export default function NewMemoryRecordButton() {
 				{open && (
 					<div className="z-50 pb-16 fixed inset-0 flex flex-col justify-center items-center">
 						<motion.div
-							className="-z-1 absolute inset-0 bg-red/20 backdrop-blur-xl backdrop-saturate-150"
+							className="-z-1 absolute inset-0 backdrop-blur-xl backdrop-saturate-150"
 							initial={{
 								opacity: 0,
 							}}
@@ -134,50 +153,113 @@ export default function NewMemoryRecordButton() {
 							}}
 						></motion.div>
 
-						<motion.div
-							className="w-72 aspect-[5/6] flex flex-col p-5 bg-white shadow-xl rounded-sm"
+						<div
+							className="z-20 relative transition-all duration-150"
 							style={{
+								transformStyle: "preserve-3d",
+								backfaceVisibility: "hidden",
 								willChange: "all",
-							}}
-							initial={{
-								opacity: 0,
-								scale: 0,
-								translateY: "50%",
-							}}
-							animate={{
-								opacity: 1,
-								scale: 1,
-								translateY: "0%",
-							}}
-							exit={{
-								scale: 0,
-								opacity: 0,
-								translateY: "-50%",
+								transform: `rotateY(${flipped ? "180deg" : "0deg"})`,
 							}}
 						>
-							<div
-								className="w-full pb-[104%] rounded-xs"
+							<motion.div
+								className="w-72 aspect-[5/6] flex flex-col p-5 bg-white shadow-xl rounded-sm "
 								style={{
-									background: `center / cover no-repeat url(${imageObjectUrl}), #dedede`,
+									willChange: "all",
+									transformStyle: "preserve-3d",
+									backfaceVisibility: "hidden",
 								}}
-							/>
-							<div className="w-full pb-[20%] relative">
+								initial={{
+									opacity: 0,
+									scale: 0,
+									translateY: "50%",
+								}}
+								animate={{
+									opacity: 1,
+									scale: 1,
+									translateY: "0%",
+								}}
+								exit={{
+									scale: 0,
+									opacity: 0,
+									translateY: "-50%",
+								}}
+							>
 								<div
-									className={"absolute left-0 right-0 top-[20%] bottom-[-20%]"}
+									className="w-full pb-[104%] rounded-xs"
+									style={{
+										background: `center / cover no-repeat url(${imageObjectUrl}), #dedede`,
+									}}
+								/>
+								<div className="w-full pb-[20%] relative">
+									<div
+										className={
+											"absolute left-0 right-0 top-[20%] bottom-[-20%]"
+										}
+									>
+										<input
+											className="w-full h-full text-center"
+											ref={titleRef}
+											value={title}
+											onChange={(e) => {
+												setTitle(e.currentTarget.value);
+											}}
+										/>
+									</div>
+								</div>
+							</motion.div>
+
+							<motion.div
+								className="absolute top-0 left-0 w-72 aspect-[5/6] flex flex-col p-5 bg-white shadow-xl rounded-sm "
+								style={{
+									willChange: "all",
+									transformStyle: "preserve-3d",
+									backfaceVisibility: "hidden",
+									rotateY: "180deg",
+									translateZ: "-1px",
+								}}
+								initial={{
+									opacity: 0,
+									scale: 0,
+									translateY: "50%",
+								}}
+								animate={{
+									opacity: 1,
+									scale: 1,
+									translateY: "0%",
+								}}
+								exit={{
+									scale: 0,
+									opacity: 0,
+									translateY: "-50%",
+								}}
+							>
+								<div
+									className="w-full pb-[104%] rounded-xs relative"
+									style={{
+										background: `#333`,
+									}}
 								>
-									<input
-										className="w-full h-full text-center"
-										ref={titleRef}
-										value={title}
+									<textarea
+										className="absolute top-0 left-0 p-2 w-full h-full text-[#eee]"
+										ref={textRef}
+										value={text}
 										onChange={(e) => {
-											setTitle(e.currentTarget.value);
+											setText(e.currentTarget.value);
 										}}
 									/>
 								</div>
-							</div>
-						</motion.div>
+								<div className="w-full pb-[20%] relative">
+									<div
+										className={
+											"absolute left-0 right-0 top-[20%] bottom-[-20%]"
+										}
+									></div>
+								</div>
+							</motion.div>
+						</div>
 
-						<div className="mt-8 flex gap-4">
+						<div className="relative mt-8 flex gap-4">
 							<motion.button
 								initial={{
 									scale: 0,
@@ -237,6 +319,35 @@ export default function NewMemoryRecordButton() {
 									<IconImages1 />
 								</label>
 							</motion.div>
+
+							<motion.button
+								className="absolute top-0 -right-16	"
+								initial={{
+									opacity: 0,
+								}}
+								animate={{
+									opacity: 1,
+									transition: {
+										delay: 0.5,
+									},
+								}}
+								exit={{
+									opacity: 0,
+								}}
+								onClick={() => {
+									setFlipped((prev) => !prev);
+								}}
+							>
+								<div
+									className={cn(
+										"flex justify-center items-center h-8 w-8 rounded-full",
+										"bg-[#fff] text-[#a69000] border border-solid border-[#fff] shadow-[0_3px_0_0_#ddd]",
+										"active:translate-y-[2px] active:shadow-none",
+									)}
+								>
+									<IconArrowRotateRightLeft className="size-5" />
+								</div>
+							</motion.button>
 
 							{/*<motion.div*/}
 							{/*	initial={{*/}
