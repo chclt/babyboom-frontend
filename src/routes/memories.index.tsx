@@ -134,6 +134,9 @@ function PageComponent() {
 							? (Math.random() * 2 - 1) * randomDegree
 							: 0;
 
+						if (!record.imageList?.[0]?.url) {
+							return null;
+						}
 						return (
 							<div key={record.id} className="flex flex-col gap-2 p-4">
 								<h2 className="text-lg font-bold">

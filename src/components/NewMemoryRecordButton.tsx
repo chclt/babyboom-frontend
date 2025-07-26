@@ -123,7 +123,7 @@ export default function NewMemoryRecordButton() {
 
 				<motion.button
 					className={cn(
-						"flex justify-center items-center h-16 w-[4.125rem] rounded-full",
+						"flex justify-center items-center h-16 w-[4.125rem] rounded-full transition-transform",
 						"bg-[#2ec748] text-white border border-solid border-[#2ec748] shadow-[0_3px_0_0_#27aa3d]",
 						"active:translate-y-[2px] active:shadow-none",
 					)}
