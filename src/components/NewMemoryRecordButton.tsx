@@ -217,9 +217,6 @@ export default function NewMemoryRecordButton() {
 									scale: 0,
 									opacity: 0,
 								}}
-								onClick={() => {
-									titleRef.current?.focus();
-								}}
 							>
 								<label
 									className={cn(
