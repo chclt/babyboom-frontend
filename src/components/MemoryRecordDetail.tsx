@@ -35,8 +35,8 @@ export default function MemoryRecordDetail({
 			<AnimatePresence>
 				{open && (
 					<div className="z-[300] pb-16 fixed inset-0 flex flex-col justify-center items-center">
-						{/* <motion.div
-							className="-z-1 absolute inset-0 bg-red/20 backdrop-blur-xl backdrop-saturate-150"
+						<motion.div
+							className="-z-1 absolute inset-0"
 							initial={{
 								opacity: 0,
 							}}
@@ -51,7 +51,7 @@ export default function MemoryRecordDetail({
 									onClose();
 								}
 							}}
-						></motion.div> */}
+						></motion.div>
 
 						<motion.div
 							className="relative"
