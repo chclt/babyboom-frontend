@@ -18,6 +18,7 @@ function PageComponent() {
 				<div className="p-8 flex flex-col gap-6">
 					<Polaraid
 						image={data.log.imageList?.[0]?.url ?? ""}
+						audio={data.log.audioList?.[0]?.url ?? ""}
 						title={data.log.title}
 						text={data.description}
 						className="w-full"

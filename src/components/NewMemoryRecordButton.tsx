@@ -2,9 +2,11 @@ import { Dialog, FileInput } from "@mantine/core";
 import { useMutation } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import IconArrowRotateRightLeft from "../assets/IconArrowRotateRightLeft.tsx";
 import IconCheckmark1 from "../assets/IconCheckmark1.tsx";
 import IconCircleCheck from "../assets/IconCircleCheck.tsx";
 import IconImages1 from "../assets/IconImages1.tsx";
+import IconLoadingCircle from "../assets/IconLoadingCircle.tsx";
 import IconPLusLarge from "../assets/IconPLusLarge.tsx";
 import IconText1 from "../assets/IconText1.tsx";
 import imageWoolAmber from "../assets/wool_amber.png";
@@ -17,10 +19,8 @@ import {
 } from "../fetchers/index.ts";
 import queryClient from "../libs/queryClient.ts";
 import { cn } from "../libs/utils.ts";
-import IconArrowRotateRightLeft from "../assets/IconArrowRotateRightLeft.tsx";
-import IconLoadingCircle from "../assets/IconLoadingCircle.tsx";
-import AudioRecorder from "./AudioRecorder.tsx";
 import AudioPlayer from "./AudioPlayer.tsx";
+import AudioRecorder from "./AudioRecorder.tsx";
 
 export default function NewMemoryRecordButton() {
 	const [open, setOpen] = useState<boolean>(false);
@@ -28,7 +28,7 @@ export default function NewMemoryRecordButton() {
 	const [imageObjectUrl, setImageObjectUrl] = useState<string>();
 	const [audioFile, setAudioFile] = useState<File | null>(null);
 
-	useEffect(() => {
+	useEffect(() => { 
 		if (image) {
 			setImageObjectUrl(URL.createObjectURL(image));
 		} else {
@@ -52,16 +52,16 @@ export default function NewMemoryRecordButton() {
 	const { mutateAsync: createMemoryRecord, isPending: isCreating } =
 		useMutation({
 			...getCreateMemoryRecordMutationOptions(),
-		});
+		}); 
 
 	const handleCreateMemoryRecord = ({
 		image,
-		audioFile,
-		title,
+		audio,
+		title, 
 		text,
 	}: {
 		image?: File;
-		audioFile?: File;
+		audio?: File;
 		title: string;
 		text: string;
 	}) => {
@@ -71,17 +71,20 @@ export default function NewMemoryRecordButton() {
 			uploadPromises.push(updateFile({ fileType: "image", file: image }));
 		}
 
-		if (audioFile) {
-			uploadPromises.push(updateFile({ fileType: "audio", file: audioFile }));
+		if (audio) {
+			uploadPromises.push(updateFile({ fileType: "audio", file: audio }));
 		}
 
 		return Promise.all(uploadPromises).then((results) => {
 			// 根据上传的文件类型，将结果分别处理
 			const imageList = results.slice(0, image ? 1 : 0);
 
+			const audioList = results.slice(image ? 1 : 0);
+
 			return createMemoryRecord({
 				title,
 				imageList,
+				audioList, 
 				text,
 			}).then(() => {
 				setImage(null);
@@ -141,7 +144,7 @@ export default function NewMemoryRecordButton() {
 							if (image || audioFile) {
 								handleCreateMemoryRecord({
 									image: image || undefined,
-									audioFile: audioFile || undefined,
+									audio: audioFile || undefined,
 									title,
 									text,
 								}).finally(() => {

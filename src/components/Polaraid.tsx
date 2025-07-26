@@ -3,11 +3,13 @@ import { AnimatePresence, motion } from "motion/react";
 import { cn } from "../libs/utils";
 import { useState } from "react";
 import IconImages1 from "../assets/IconImages1";
+import IconVoice1 from "../assets/IconVoice1";
 
 interface PolaraidProps {
 	image: string;
 	title?: string;
 	text?: string;
+	audio?: string;
 
 	className?: string;
 	onClick?: () => void;
@@ -17,6 +19,8 @@ export default function Polaraid({
 	image,
 	title,
 	text,
+	audio,
+
 	className,
 	...props
 }: PolaraidProps) {
@@ -53,11 +57,17 @@ export default function Polaraid({
 			{...props}
 		>
 			<div
-				className="w-full pb-[104%] rounded-xs"
+				className="w-full pb-[104%] rounded-xs relative"
 				style={{
 					background: `center / cover no-repeat url(${image}), #dedede`,
 				}}
-			/>
+			>
+				{audio && (
+					<div className="absolute p-1 right-2 bottom-2 flex items-center justify-center text-black/75 bg-white/50 rounded-full">
+						<IconVoice1 className="w-4 h-4" />
+					</div>
+				)}
+			</div>
 			<div className="w-full pb-[20%] relative">
 				<div
 					className={

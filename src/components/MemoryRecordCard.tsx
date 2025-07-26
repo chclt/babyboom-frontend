@@ -17,6 +17,7 @@ export default function MemoryRecordCard({
 		<div {...props}>
 			<Polaraid
 				image={record.imageList?.[0]?.url ?? ""}
+				audio={record.audioList?.[0]?.url ?? ""}
 				title={record.title}
 				text={record.text}
 				className="w-full"

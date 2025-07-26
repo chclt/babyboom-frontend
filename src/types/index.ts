@@ -11,7 +11,9 @@ export interface MemoryRecord {
 		url?: string;
 		userId?: string;
 	}[];
-	audio?: string;
+	audioList: {
+		url: string;
+	}[];
 	text?: string;
 	title?: string;
 

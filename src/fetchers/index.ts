@@ -30,6 +30,7 @@ export function getMemoryRecordListQueryOptions(): DefinedInitialDataOptions<
 
 const CreateMemoryRecordRequestSchema = z.object({
 	imageList: z.array(z.string()),
+	audioList: z.array(z.string()),
 	title: z.string().optional(),
 	text: z.string().optional(),
 });
@@ -43,8 +44,13 @@ export function getCreateMemoryRecordMutationOptions(): UseMutationOptions<
 > {
 	return {
 		mutationKey: ["CreateMemoryRecord"],
-		mutationFn: ({ imageList, text, title }: CreateMemoryRecordRequest) =>
-			request.post("/log", { imageList, text, title }),
+		mutationFn: ({
+			imageList,
+			text,
+			title,
+			audioList,
+		}: CreateMemoryRecordRequest) =>
+			request.post("/log", { imageList, text, title, audioList }),
 	};
 }
 
