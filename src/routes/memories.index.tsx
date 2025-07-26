@@ -122,9 +122,9 @@ function PageComponent() {
 								}}
 							/>
 						</button>
-						<button className="size-12 flex items-center justify-center">
+						{/* <button className="size-12 flex items-center justify-center">
 							<IconCircleQuestionmark />
-						</button>
+						</button> */}
 					</div>
 				</div>
 
