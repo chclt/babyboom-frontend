@@ -30,12 +30,12 @@ export function getMemoryRecordListQueryOptions(): DefinedInitialDataOptions<
 
 const CreateMemoryRecordRequestSchema = z.object({
 	imageList: z.array(z.string()),
-	text: z.string(),
+	title: z.string().optional(),
+	text: z.string().optional(),
 });
 type CreateMemoryRecordRequest = z.infer<
 	typeof CreateMemoryRecordRequestSchema
 >;
-
 export function getCreateMemoryRecordMutationOptions(): UseMutationOptions<
 	unknown,
 	DefaultError,
@@ -43,8 +43,8 @@ export function getCreateMemoryRecordMutationOptions(): UseMutationOptions<
 > {
 	return {
 		mutationKey: ["CreateMemoryRecord"],
-		mutationFn: ({ imageList, text }: CreateMemoryRecordRequest) =>
-			request.post("/log", { imageList, text }),
+		mutationFn: ({ imageList, text, title }: CreateMemoryRecordRequest) =>
+			request.post("/log", { imageList, text, title }),
 	};
 }
 

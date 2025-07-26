@@ -12,6 +12,6 @@ export interface MemoryRecord {
 	}[];
 	audio?: string;
 	text?: string;
+	title?: string;
 
-	createAt: string;
-}
+	createTime: string;}

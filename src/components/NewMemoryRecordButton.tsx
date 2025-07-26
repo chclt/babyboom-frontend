@@ -12,13 +12,14 @@ import imageWoolGreen from "../assets/wool_green.png";
 import imageWoolRed from "../assets/wool_red.png";
 import {
 	getCreateMemoryRecordMutationOptions,
+	getMemoryRecordListQueryOptions,
 	getUploadFileMutationOptions,
 } from "../fetchers/index.ts";
+import queryClient from "../libs/queryClient.ts";
 import { cn } from "../libs/utils.ts";
 
 export default function NewMemoryRecordButton() {
 	const [open, setOpen] = useState<boolean>(false);
-
 	const [image, setImage] = useState<File | null>(null);
 	const [imageObjectUrl, setImageObjectUrl] = useState<string>();
 
@@ -28,12 +29,13 @@ export default function NewMemoryRecordButton() {
 		} else {
 			if (imageObjectUrl) {
 				URL.revokeObjectURL(imageObjectUrl);
+				setImageObjectUrl(undefined);
 			}
 		}
 	}, [image]);
 
-	const [text, setText] = useState<string>("");
-	const textRef = useRef<HTMLInputElement>(null);
+	const [title, setTitle] = useState<string>("");
+	const titleRef = useRef<HTMLInputElement>(null);
 
 	const { mutateAsync: updateFile } = useMutation({
 		...getUploadFileMutationOptions(),
@@ -45,13 +47,19 @@ export default function NewMemoryRecordButton() {
 
 	const handleCreateMemoryRecord = ({
 		image,
-		text,
+		title,
 	}: {
 		image: File;
-		text: string;
+		title: string;
 	}) => {
 		return updateFile({ fileType: "image", file: image }).then((res) => {
-			return createMemoryRecord({ text, imageList: [res] });
+			return createMemoryRecord({ title, imageList: [res] }).then(() => {
+				setImage(null);
+				setTitle("");
+				queryClient.invalidateQueries({
+					queryKey: getMemoryRecordListQueryOptions().queryKey,
+				});
+			});
 		});
 	};
 
@@ -91,7 +99,7 @@ export default function NewMemoryRecordButton() {
 					onClick={() => {
 						if (open) {
 							if (image) {
-								handleCreateMemoryRecord({ image, text }).finally(() => {
+								handleCreateMemoryRecord({ image, title }).finally(() => {
 									setOpen(false);
 								});
 							} else {
@@ -159,10 +167,10 @@ export default function NewMemoryRecordButton() {
 								>
 									<input
 										className="w-full h-full text-center"
-										ref={textRef}
-										value={text}
+										ref={titleRef}
+										value={title}
 										onChange={(e) => {
-											setText(e.currentTarget.value);
+											setTitle(e.currentTarget.value);
 										}}
 									/>
 								</div>
@@ -182,7 +190,7 @@ export default function NewMemoryRecordButton() {
 									opacity: 0,
 								}}
 								onClick={() => {
-									textRef.current?.focus();
+									titleRef.current?.focus();
 								}}
 							>
 								<div
@@ -210,7 +218,7 @@ export default function NewMemoryRecordButton() {
 									opacity: 0,
 								}}
 								onClick={() => {
-									textRef.current?.focus();
+									titleRef.current?.focus();
 								}}
 							>
 								<label
