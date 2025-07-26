@@ -57,7 +57,7 @@ export default function MemoryRecordDetail({
 							className="relative"
 							style={{
 								transformStyle: "preserve-3d",
-								backfaceVisibility: "hidden",
+								// backfaceVisibility: "hidden",
 								willChange: "all",
 							}}
 							initial={{
@@ -100,7 +100,7 @@ export default function MemoryRecordDetail({
 								style={{
 									rotateY: "180deg",
 									transformStyle: "preserve-3d",
-									backfaceVisibility: "hidden",
+									// backfaceVisibility: "hidden",
 								}}
 							>
 								<div
