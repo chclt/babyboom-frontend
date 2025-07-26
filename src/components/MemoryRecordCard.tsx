@@ -16,13 +16,10 @@ export default function MemoryRecordCard({
 	return (
 		<div {...props}>
 			<Polaraid
-				image={record.imageList?.[0]?.url ?? ''}
+				image={record.imageList?.[0]?.url ?? ""}
 				title={record.title}
 				text={record.text}
 				className="w-full"
-				onClick={() => {
-					setOpen(true);
-				}}
 			/>
 
 			{/* <AnimatePresence>

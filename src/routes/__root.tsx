@@ -10,7 +10,7 @@ export const Route = createRootRoute({
 
 function PageComponent() {
 	return (
-		<div className="max-w-md">
+		<div className="mx-auto max-w-md">
 			<Outlet />
 
 			<nav className="fixed inset-x-0 bottom-0 h-[59px] border border-solid border-neutral-200 bg-white">

@@ -1,6 +1,8 @@
 import { useElementSize } from "@mantine/hooks";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { cn } from "../libs/utils";
+import { useState } from "react";
+import IconImages1 from "../assets/IconImages1";
 
 interface PolaraidProps {
 	image: string;
@@ -28,6 +30,7 @@ export default function Polaraid({
 				className,
 			)}
 			style={{
+				transformStyle: "preserve-3d",
 				boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)",
 				fontSize: `calc(${width}px / 13)`,
 				willChange: "all",

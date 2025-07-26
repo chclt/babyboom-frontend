@@ -24,25 +24,24 @@ function PageComponent() {
 					/>
 
 					<p>{data.description}</p>
-
-					<div className="fixed bottom-20 right-8 flex justify-end">
-						<button
-							className={cn(
-								"flex justify-center items-center h-16 px-6 rounded-full border border-solid",
-								"bg-[#2ec748] text-white border border-solid border-[#2ec748] shadow-[0_3px_0_0_#27aa3d]",
-								"active:translate-y-[2px] active:shadow-none",
-							)}
-							onClick={() => {
-								queryClient.invalidateQueries({
-									queryKey: getLogBoomQueryOptions().queryKey,
-								});
-							}}
-						>
-							{isFetching ? "正在抽取回忆" : "换一张"}
-						</button>
-					</div>
 				</div>
 			)}
+			<div className="fixed bottom-20 right-8 flex justify-end">
+				<button
+					className={cn(
+						"flex justify-center items-center h-16 px-6 rounded-full border border-solid",
+						"bg-[#2ec748] text-white border border-solid border-[#2ec748] shadow-[0_3px_0_0_#27aa3d]",
+						"active:translate-y-[2px] active:shadow-none",
+					)}
+					onClick={() => {
+						queryClient.invalidateQueries({
+							queryKey: getLogBoomQueryOptions().queryKey,
+						});
+					}}
+				>
+					{isFetching ? "正在抽取回忆" : "换一张"}
+				</button>
+			</div>
 		</>
 	);
 }

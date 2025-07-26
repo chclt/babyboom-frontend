@@ -1,4 +1,4 @@
-import { FileInput } from "@mantine/core";
+import { Dialog, FileInput } from "@mantine/core";
 import { useMutation } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
@@ -67,7 +67,7 @@ export default function NewMemoryRecordButton() {
 		<>
 			<div
 				className={cn(
-					"z-[100] fixed bottom-20 right-8 w-full flex justify-end",
+					"z-[100] fixed bottom-20 right-8 w-full flex justify-end transition-all duration-150",
 					open && "translate-y-8",
 				)}
 			>
@@ -196,7 +196,7 @@ export default function NewMemoryRecordButton() {
 								<div
 									className={cn(
 										"flex justify-center items-center h-16 w-[4.125rem] rounded-full",
-										"bg-[#ffde00] text-[#a69000] border border-solid border-[##ffde00] shadow-[0_3px_0_0_#d9bd00]",
+										"bg-[#ffde00] text-[#a69000] border border-solid border-[#ffde00] shadow-[0_3px_0_0_#d9bd00]",
 										"active:translate-y-[2px] active:shadow-none",
 									)}
 								>

@@ -2,7 +2,7 @@ import { useToggle } from "@mantine/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { degrees } from "motion/react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import IconCircleQuestionmark from "../assets/IconCircleQuestionmark.tsx";
 import IconLayoutGrid from "../assets/IconLayoutGrid.tsx";
 import IconTimeFiles from "../assets/IconTimeFiles.tsx";
@@ -18,6 +18,8 @@ import {
 } from "../components/ui/dialog";
 import { getMemoryRecordListQueryOptions } from "../fetchers";
 import { cn } from "../libs/utils.ts";
+import MemoryRecordDetail from "../components/MemoryRecordDetail.tsx";
+import type { MemoryRecord } from "../types/index.ts";
 
 export const Route = createFileRoute("/memories/")({
 	component: PageComponent,
@@ -57,6 +59,9 @@ function PageComponent() {
 	]);
 
 	const [randomDegree, toggleRandomDegree] = useToggle([3, 3, 5, 1]);
+
+	const [open, setOpen] = useState(false);
+	const [openedRecord, setOpenedRecord] = useState<MemoryRecord | null>(null);
 
 	return (
 		<>
@@ -160,6 +165,10 @@ function PageComponent() {
 											record={record}
 											className="transition-all duration-150"
 											style={{ transform: `rotate(${degree}deg)` }}
+											onClick={() => {
+												setOpen(true);
+												setOpenedRecord(record);
+											}}
 										/>
 									);
 								})}
@@ -180,6 +189,10 @@ function PageComponent() {
 										record={record}
 										className="transition-all duration-150"
 										style={{ transform: `rotate(${degree}deg)` }}
+										onClick={() => {
+											setOpen(true);
+											setOpenedRecord(record);
+										}}
 									/>
 								);
 							}
@@ -189,6 +202,13 @@ function PageComponent() {
 			</div>
 
 			<NewMemoryRecordButton />
+			{openedRecord && (
+				<MemoryRecordDetail
+					open={open}
+					onClose={() => setOpen(false)}
+					record={openedRecord}
+				/>
+			)}
 		</>
 	);
 }
