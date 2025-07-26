@@ -1,6 +1,15 @@
 export interface MemoryRecord {
 	image?: string;
-	images?: unknown[];
+	imageList: {
+		analysis?: string;
+		createTime?: string;
+		id?: string;
+		isDeleted?: number;
+		logId?: string;
+		updateTime?: string;
+		url?: string;
+		userId?: string;
+	}[];
 	audio?: string;
 	text?: string;
 

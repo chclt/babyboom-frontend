@@ -14,9 +14,22 @@ function PageComponent() {
 		<div>
 			<Carousel>
 				<CarouselContent>
-					<CarouselItem>...</CarouselItem>
-					<CarouselItem>...</CarouselItem>
-					<CarouselItem>...</CarouselItem>
+					<CarouselItem>
+						<div className="p-8">
+							<div className="text-2xl font-semibold">你好</div>
+							<div className="w-72 h-80 bg-white rounded-sm shadow"></div>
+						</div>
+					</CarouselItem>
+					<CarouselItem>
+						<div className="p-8">
+							<div className="w-72 h-80 bg-white rounded-sm shadow"></div>
+						</div>
+					</CarouselItem>
+					<CarouselItem>
+						<div className="p-8">
+							<div className="w-72 h-80 bg-white rounded-sm shadow"></div>
+						</div>
+					</CarouselItem>
 				</CarouselContent>
 			</Carousel>
 		</div>

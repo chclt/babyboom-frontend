@@ -1,7 +1,7 @@
 import { FileInput } from "@mantine/core";
 import { useMutation } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import IconCheckmark1 from "../assets/IconCheckmark1.tsx";
 import IconCircleCheck from "../assets/IconCircleCheck.tsx";
 import IconImages1 from "../assets/IconImages1.tsx";
@@ -33,6 +33,7 @@ export default function NewMemoryRecordButton() {
 	}, [image]);
 
 	const [text, setText] = useState<string>("");
+	const textRef = useRef<HTMLInputElement>(null);
 
 	const { mutateAsync: updateFile } = useMutation({
 		...getUploadFileMutationOptions(),
@@ -50,7 +51,7 @@ export default function NewMemoryRecordButton() {
 		text: string;
 	}) => {
 		return updateFile({ fileType: "image", file: image }).then((res) => {
-			return createMemoryRecord({ image: res, text });
+			return createMemoryRecord({ text, imageList: [res] });
 		});
 	};
 
@@ -93,6 +94,8 @@ export default function NewMemoryRecordButton() {
 								handleCreateMemoryRecord({ image, text }).finally(() => {
 									setOpen(false);
 								});
+							} else {
+								setOpen(false);
 							}
 						} else {
 							setOpen(true);
@@ -156,6 +159,7 @@ export default function NewMemoryRecordButton() {
 								>
 									<input
 										className="w-full h-full text-center"
+										ref={textRef}
 										value={text}
 										onChange={(e) => {
 											setText(e.currentTarget.value);
@@ -166,7 +170,7 @@ export default function NewMemoryRecordButton() {
 						</motion.div>
 
 						<div className="mt-8 flex gap-4">
-							<motion.div
+							<motion.button
 								initial={{
 									scale: 0,
 								}}
@@ -177,8 +181,11 @@ export default function NewMemoryRecordButton() {
 									scale: 0,
 									opacity: 0,
 								}}
+								onClick={() => {
+									textRef.current?.focus();
+								}}
 							>
-								<label
+								<div
 									className={cn(
 										"flex justify-center items-center h-16 w-[4.125rem] rounded-full",
 										"bg-[#ffde00] text-[#a69000] border border-solid border-[##ffde00] shadow-[0_3px_0_0_#d9bd00]",
@@ -186,8 +193,8 @@ export default function NewMemoryRecordButton() {
 									)}
 								>
 									<IconText1 />
-								</label>
-							</motion.div>
+								</div>
+							</motion.button>
 
 							<motion.div
 								initial={{
@@ -201,6 +208,9 @@ export default function NewMemoryRecordButton() {
 								exit={{
 									scale: 0,
 									opacity: 0,
+								}}
+								onClick={() => {
+									textRef.current?.focus();
 								}}
 							>
 								<label

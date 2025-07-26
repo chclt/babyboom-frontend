@@ -1,4 +1,5 @@
-import type {DefaultError,
+import type {
+	DefaultError,
 	DefinedInitialDataOptions,
 	UseMutationOptions,
 	UseQueryOptions,
@@ -19,13 +20,16 @@ export function getMemoryRecordListQueryOptions(): DefinedInitialDataOptions<
 > {
 	return {
 		queryKey: ["MemoryRecordList"],
-		queryFn: () => _mock.memoryRecordList,
+		queryFn: () =>
+			request.post("/log/list", { date: null }).then((res) => {
+				return res.data.data;
+			}),
 		initialData: [],
 	};
 }
 
 const CreateMemoryRecordRequestSchema = z.object({
-	image: z.string(),
+	imageList: z.array(z.string()),
 	text: z.string(),
 });
 type CreateMemoryRecordRequest = z.infer<
@@ -39,8 +43,8 @@ export function getCreateMemoryRecordMutationOptions(): UseMutationOptions<
 > {
 	return {
 		mutationKey: ["CreateMemoryRecord"],
-		mutationFn: ({ image, text }: CreateMemoryRecordRequest) =>
-			request.post("/log/memory", { image, text }),
+		mutationFn: ({ imageList, text }: CreateMemoryRecordRequest) =>
+			request.post("/log", { imageList, text }),
 	};
 }
 
