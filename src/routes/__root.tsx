@@ -28,7 +28,7 @@ function PageComponent() {
 							to="/boom"
 							className="w-full h-full flex flex-col justify-center items-center group"
 						>
-							<IconHatSparkle className="size-7 group-[.active]:text-black relative top-[1.5px]" />
+							<IconHatSparkle className="size-7 group-[.active]:text-black relative top-[-1.5px]" />
 						</Link>
 					</li>
 				</menu>

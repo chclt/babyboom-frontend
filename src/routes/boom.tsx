@@ -1,13 +1,24 @@
-import {createFileRoute} from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
+import {
+	Carousel,
+	CarouselContent,
+	CarouselItem,
+} from "../components/ui/carousel.tsx";
 
-export const Route = createFileRoute('/boom')({
-  component: PageComponent,
-})
+export const Route = createFileRoute("/boom")({
+	component: PageComponent,
+});
 
 function PageComponent() {
-  return (
-    <div>
-      <h1>boom</h1>
-    </div>
-  )
+	return (
+		<div>
+			<Carousel>
+				<CarouselContent>
+					<CarouselItem>...</CarouselItem>
+					<CarouselItem>...</CarouselItem>
+					<CarouselItem>...</CarouselItem>
+				</CarouselContent>
+			</Carousel>
+		</div>
+	);
 }

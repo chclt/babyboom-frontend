@@ -1,4 +1,5 @@
 import { FileInput } from "@mantine/core";
+import { useMutation } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import IconCheckmark1 from "../assets/IconCheckmark1.tsx";
@@ -9,6 +10,10 @@ import IconText1 from "../assets/IconText1.tsx";
 import imageWoolAmber from "../assets/wool_amber.png";
 import imageWoolGreen from "../assets/wool_green.png";
 import imageWoolRed from "../assets/wool_red.png";
+import {
+	getCreateMemoryRecordMutationOptions,
+	getUploadFileMutationOptions,
+} from "../fetchers/index.ts";
 import { cn } from "../libs/utils.ts";
 
 export default function NewMemoryRecordButton() {
@@ -27,7 +32,27 @@ export default function NewMemoryRecordButton() {
 		}
 	}, [image]);
 
-	const [text, setText] = useState<string | null>(null);
+	const [text, setText] = useState<string>("");
+
+	const { mutateAsync: updateFile } = useMutation({
+		...getUploadFileMutationOptions(),
+	});
+
+	const { mutateAsync: createMemoryRecord } = useMutation({
+		...getCreateMemoryRecordMutationOptions(),
+	});
+
+	const handleCreateMemoryRecord = ({
+		image,
+		text,
+	}: {
+		image: File;
+		text: string;
+	}) => {
+		return updateFile({ fileType: "image", file: image }).then((res) => {
+			return createMemoryRecord({ image: res, text });
+		});
+	};
 
 	return (
 		<>
@@ -37,6 +62,13 @@ export default function NewMemoryRecordButton() {
 					open && "translate-y-8",
 				)}
 			>
+				<div>
+					<div
+						className="overflow-hidden block w-full h-4 bg-amber-300 rounded-full"
+						style={{}}
+					></div>
+				</div>
+
 				<motion.button
 					className={cn(
 						"flex justify-center items-center h-16 w-[4.125rem] rounded-full",
@@ -56,7 +88,15 @@ export default function NewMemoryRecordButton() {
 						opacity: 0,
 					}}
 					onClick={() => {
-						setOpen((prev) => !prev);
+						if (open) {
+							if (image) {
+								handleCreateMemoryRecord({ image, text }).finally(() => {
+									setOpen(false);
+								});
+							}
+						} else {
+							setOpen(true);
+						}
 					}}
 				>
 					{open ? (
@@ -114,7 +154,13 @@ export default function NewMemoryRecordButton() {
 								<div
 									className={"absolute left-0 right-0 top-[20%] bottom-[-20%]"}
 								>
-									<textarea className="w-full h-full" />
+									<input
+										className="w-full h-full text-center"
+										value={text}
+										onChange={(e) => {
+											setText(e.currentTarget.value);
+										}}
+									/>
 								</div>
 							</div>
 						</motion.div>
