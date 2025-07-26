@@ -72,3 +72,22 @@ export function getUploadFileMutationOptions(): UseMutationOptions<
 		},
 	};
 }
+
+const LogBoomResponseSchema = z.object({
+	log: z.custom<MemoryRecord>(),
+	usedImage: z.string(),
+	description: z.string(),
+});
+
+type LogBoomResponse = z.infer<typeof LogBoomResponseSchema>;
+
+export function getLogBoomQueryOptions(): UseQueryOptions<LogBoomResponse> {
+	return {
+		queryKey: ["LogBoom"],
+		queryFn: () =>
+			request
+				.get<{ data: LogBoomResponse }>("/log/boom")
+				.then((res) => res.data.data),
+		refetchOnWindowFocus: false,
+	};
+}

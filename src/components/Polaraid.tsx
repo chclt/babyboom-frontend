@@ -7,7 +7,8 @@ interface PolaraidProps {
 	title?: string;
 	text?: string;
 
-	className: string;
+	className?: string;
+	onClick?: () => void;
 }
 
 export default function Polaraid({

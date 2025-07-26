@@ -62,6 +62,57 @@ function PageComponent() {
 		<>
 			<div className="bg-[#eee] pb-64 flex flex-col">
 				<div className="z-10 sticky top-0 right-0 p-4 flex items-center justify-between text-neutral-800">
+					{/* <div className="z-50 gradient-blur absolute left-0 top-0 h-24 w-full  pointer-events-none bg-red">
+						<div
+							className="z-[1] absolute inset-0 backdrop-blur-[0.5px]"
+							style={{
+								mask: "linear-gradient(0deg, transparent 0, #000 12.5%, #000 25%, transparent 37.5%)",
+							}}
+						/>
+						<div
+							className="z-[2] absolute inset-0 backdrop-blur-[1px]"
+							style={{
+								mask: "linear-gradient(0deg, transparent 0, #000 12.5%, #000 25%, transparent 37.5%)",
+							}}
+						/>
+						<div
+							className="z-[3] absolute inset-0 backdrop-blur-[1.5px]"
+							style={{
+								mask: "linear-gradient(0deg, transparent 0, #000 12.5%, #000 25%, transparent 37.5%)",
+							}}
+						/>
+						<div
+							className="z-[4] absolute inset-0 backdrop-blur-[3px]"
+							style={{
+								mask: "linear-gradient(0deg, transparent 0, #000 12.5%, #000 25%, transparent 37.5%)",
+							}}
+						/>
+						<div
+							className="z-[5] absolute inset-0 backdrop-blur-[4px]"
+							style={{
+								mask: "linear-gradient(0deg, transparent 0, #000 12.5%, #000 25%, transparent 37.5%)",
+							}}
+						/>
+						<div
+							className="z-[6] absolute inset-0 backdrop-blur-[6px]"
+							style={{
+								mask: "linear-gradient(0deg, transparent 0, #000 12.5%, #000 25%, transparent 37.5%)",
+							}}
+						/>
+						<div
+							className="z-[7] absolute inset-0 backdrop-blur-[8px]"
+							style={{
+								mask: "linear-gradient(0deg, transparent 0, #000 12.5%, #000 25%, transparent 37.5%)",
+							}}
+						/>
+						<div
+							className="z-[8] absolute inset-0 backdrop-blur-[10px]"
+							style={{
+								mask: "linear-gradient(0deg, transparent 0, #000 12.5%, #000 25%, transparent 37.5%)",
+							}}
+						/>
+					</div> */}
+
 					<h1 className="text-2xl font-bold">
 						{view === "grid" ? "全部照片" : "时间线"}
 					</h1>
