@@ -45,7 +45,7 @@ function PageComponent() {
 
 	return (
 		<>
-			<div className="bg-[#eee] pb-64 flex flex-col">
+			<div className=" pb-64 flex flex-col">
 				<div className="z-10 sticky top-0 right-0 p-4 flex items-center justify-between text-neutral-800">
 					{/* <div className="z-50 gradient-blur absolute left-0 top-0 h-24 w-full  pointer-events-none bg-red">
 						<div

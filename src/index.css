@@ -135,7 +135,14 @@
 
 html,
 body {
-	background: #eee;
+	background: #f3f9e3;
+	background-image: linear-gradient(
+		to bottom,
+		#f3f9e3,
+		#f5d9d8,
+		#d5f0f0,
+		#fff7e6
+	);
 	font-family: "ChillReunion_Round";
 }
 
