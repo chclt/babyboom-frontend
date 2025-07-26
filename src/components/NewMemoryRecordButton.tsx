@@ -19,11 +19,14 @@ import queryClient from "../libs/queryClient.ts";
 import { cn } from "../libs/utils.ts";
 import IconArrowRotateRightLeft from "../assets/IconArrowRotateRightLeft.tsx";
 import IconLoadingCircle from "../assets/IconLoadingCircle.tsx";
+import AudioRecorder from "./AudioRecorder.tsx";
+import AudioPlayer from "./AudioPlayer.tsx";
 
 export default function NewMemoryRecordButton() {
 	const [open, setOpen] = useState<boolean>(false);
 	const [image, setImage] = useState<File | null>(null);
 	const [imageObjectUrl, setImageObjectUrl] = useState<string>();
+	const [audioFile, setAudioFile] = useState<File | null>(null);
 
 	useEffect(() => {
 		if (image) {
@@ -53,16 +56,36 @@ export default function NewMemoryRecordButton() {
 
 	const handleCreateMemoryRecord = ({
 		image,
+		audioFile,
 		title,
 		text,
 	}: {
-		image: File;
+		image?: File;
+		audioFile?: File;
 		title: string;
 		text: string;
 	}) => {
-		return updateFile({ fileType: "image", file: image }).then((res) => {
-			return createMemoryRecord({ title, imageList: [res], text }).then(() => {
+		const uploadPromises: Promise<string>[] = [];
+
+		if (image) {
+			uploadPromises.push(updateFile({ fileType: "image", file: image }));
+		}
+
+		if (audioFile) {
+			uploadPromises.push(updateFile({ fileType: "audio", file: audioFile }));
+		}
+
+		return Promise.all(uploadPromises).then((results) => {
+			// 根据上传的文件类型，将结果分别处理
+			const imageList = results.slice(0, image ? 1 : 0);
+
+			return createMemoryRecord({
+				title,
+				imageList,
+				text,
+			}).then(() => {
 				setImage(null);
+				setAudioFile(null);
 				setTitle("");
 				setText("");
 				queryClient.invalidateQueries({
@@ -115,8 +138,13 @@ export default function NewMemoryRecordButton() {
 					}}
 					onClick={() => {
 						if (open) {
-							if (image) {
-								handleCreateMemoryRecord({ image, title, text }).finally(() => {
+							if (image || audioFile) {
+								handleCreateMemoryRecord({
+									image: image || undefined,
+									audioFile: audioFile || undefined,
+									title,
+									text,
+								}).finally(() => {
 									setOpen(false);
 								});
 							} else {
@@ -349,6 +377,26 @@ export default function NewMemoryRecordButton() {
 								</div>
 							</motion.button>
 
+							<motion.div
+								initial={{
+									opacity: 0,
+									scale: 0,
+								}}
+								animate={{
+									opacity: 1,
+									scale: 1,
+								}}
+								exit={{
+									scale: 0,
+									opacity: 0,
+								}}
+							>
+								<AudioRecorder
+									onRecordingComplete={(file) => setAudioFile(file)}
+									className="h-16 w-[4.125rem]"
+								/>
+							</motion.div>
+
 							{/*<motion.div*/}
 							{/*	initial={{*/}
 							{/*		scale: 0,*/}
@@ -375,6 +423,27 @@ export default function NewMemoryRecordButton() {
 							{/*	</label>*/}
 							{/*</motion.div>*/}
 						</div>
+
+						{/* 音频播放器 */}
+						{audioFile && (
+							<motion.div
+								className="mt-4"
+								initial={{
+									opacity: 0,
+									scale: 0,
+								}}
+								animate={{
+									opacity: 1,
+									scale: 1,
+								}}
+								exit={{
+									scale: 0,
+									opacity: 0,
+								}}
+							>
+								<AudioPlayer audioFile={audioFile} />
+							</motion.div>
+						)}
 					</div>
 				)}
 			</AnimatePresence>
