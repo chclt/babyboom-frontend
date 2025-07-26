@@ -1,4 +1,5 @@
 export interface MemoryRecord {
+	id: string;
 	image?: string;
 	imageList: {
 		analysis?: string;
@@ -14,4 +15,5 @@ export interface MemoryRecord {
 	text?: string;
 	title?: string;
 
-	createTime: string;}
+	createTime: string;
+}

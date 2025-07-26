@@ -20,6 +20,8 @@ import { getMemoryRecordListQueryOptions } from "../fetchers";
 import { cn } from "../libs/utils.ts";
 import MemoryRecordDetail from "../components/MemoryRecordDetail.tsx";
 import type { MemoryRecord } from "../types/index.ts";
+import { record } from "zod";
+import dayjs from "dayjs";
 
 export const Route = createFileRoute("/memories/")({
 	component: PageComponent,
@@ -28,28 +30,6 @@ function PageComponent() {
 	const { data: memoryRecords } = useQuery(getMemoryRecordListQueryOptions());
 
 	const [view, toggleView] = useToggle(["grid", "timeline"]);
-
-	const timelineGroup = useMemo(() => {
-		const groups: Record<string, typeof memoryRecords> = {};
-		if (memoryRecords && memoryRecords.length) {
-			memoryRecords.forEach((record) => {
-				// Use createAt, format as "YYYY-MM"
-				const date = new Date(record.createTime);
-				const year = date.getFullYear();
-				const month = String(date.getMonth() + 1).padStart(2, "0");
-				const day = String(date.getDate()).padStart(2, "0");
-
-				const temp = String(date.getMinutes()).padStart(2, "0");
-
-				const key = `${year}-${month}-${day} ${temp}`;
-				if (!groups[key]) groups[key] = [];
-				groups[key].unshift(record);
-			});
-		}
-		return groups;
-	}, [memoryRecords]);
-
-	console.log(timelineGroup);
 
 	const [layout, toggleLayout] = useToggle([
 		"grid-cols-2 gap-2",
@@ -149,32 +129,33 @@ function PageComponent() {
 				</div>
 
 				{view === "timeline" &&
-					Object.entries(timelineGroup).map(([key, records]) => (
-						<div key={key} className="flex flex-col gap-2 p-4">
-							<h2 className="text-lg font-bold">{key}</h2>
-							<ol
-								className={cn("p-2 grid transition-all duration-150", layout)}
-							>
-								{records.map((record) => {
-									const degree = randomDegree
-										? (Math.random() * 2 - 1) * randomDegree
-										: 0;
+					memoryRecords.map((record) => {
+						const degree = randomDegree
+							? (Math.random() * 2 - 1) * randomDegree
+							: 0;
 
-									return (
-										<MemoryRecordCard
-											record={record}
-											className="transition-all duration-150"
-											style={{ transform: `rotate(${degree}deg)` }}
-											onClick={() => {
-												setOpen(true);
-												setOpenedRecord(record);
-											}}
-										/>
-									);
-								})}
-							</ol>
-						</div>
-					))}
+						return (
+							<div key={record.id} className="flex flex-col gap-2 p-4">
+								<h2 className="text-lg font-bold">
+									{dayjs(record.createTime).format("YYYY-MM-DD HH:mm")}
+								</h2>
+								<p>{record.text}</p>
+								<ol
+									className={cn("p-2 grid transition-all duration-150", layout)}
+								>
+									<MemoryRecordCard
+										record={record}
+										className="transition-all duration-150"
+										style={{ transform: `rotate(${degree}deg)` }}
+										onClick={() => {
+											setOpen(true);
+											setOpenedRecord(record);
+										}}
+									/>
+								</ol>
+							</div>
+						);
+					})}
 
 				{view === "grid" && (
 					<ol className={cn("p-2 grid transition-all duration-150", layout)}>
